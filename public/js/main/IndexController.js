@@ -55,10 +55,20 @@ IndexController.prototype._registerServiceWorker = function() {
     });
   });
 
+<<<<<<< HEAD
   // TODO: listen for the controlling service worker changing
   // and reload the page
   navigator.serviceWorker.addEventListener('controllerchange', function() {
     window.location.reload();
+=======
+  // Ensure refresh is only called once.
+  // This works around a bug in "force update on reload".
+  var refreshing;
+  navigator.serviceWorker.addEventListener('controllerchange', function() {
+    if (refreshing) return;
+    window.location.reload();
+    refreshing = true;
+>>>>>>> task-page-skeleton
   });
 };
 
