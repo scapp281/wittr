@@ -18,7 +18,6 @@ IndexController.prototype._registerServiceWorker = function() {
   var indexController = this;
 
   navigator.serviceWorker.register('/sw.js').then(function(reg) {
-<<<<<<< HEAD
     // TODO: if there's no controller, this page wasn't loaded
     // via a service worker, so they're looking at the latest version.
     // In that case, exit early
@@ -34,7 +33,7 @@ IndexController.prototype._registerServiceWorker = function() {
     // progress. If it becomes "installed", call
     // indexController._updateReady()
     if(req.installing){
-=======
+
     if (!navigator.serviceWorker.controller) {
       return;
     }
@@ -45,7 +44,6 @@ IndexController.prototype._registerServiceWorker = function() {
     }
 
     if (reg.installing) {
->>>>>>> task-update-reload
       indexController._trackInstalling(reg.installing);
       return;
     }
@@ -55,12 +53,11 @@ IndexController.prototype._registerServiceWorker = function() {
     });
   });
 
-<<<<<<< HEAD
   // TODO: listen for the controlling service worker changing
   // and reload the page
   navigator.serviceWorker.addEventListener('controllerchange', function() {
     window.location.reload();
-=======
+
   // Ensure refresh is only called once.
   // This works around a bug in "force update on reload".
   var refreshing;
@@ -68,7 +65,6 @@ IndexController.prototype._registerServiceWorker = function() {
     if (refreshing) return;
     window.location.reload();
     refreshing = true;
->>>>>>> task-page-skeleton
   });
 };
 
