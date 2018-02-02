@@ -18,6 +18,7 @@ IndexController.prototype._registerServiceWorker = function() {
   var indexController = this;
 
   navigator.serviceWorker.register('/sw.js').then(function(reg) {
+<<<<<<< HEAD
     // TODO: if there's no controller, this page wasn't loaded
     // via a service worker, so they're looking at the latest version.
     // In that case, exit early
@@ -33,17 +34,31 @@ IndexController.prototype._registerServiceWorker = function() {
     // progress. If it becomes "installed", call
     // indexController._updateReady()
     if(req.installing){
+=======
+    if (!navigator.serviceWorker.controller) {
+      return;
+    }
+
+    if (reg.waiting) {
+      indexController._updateReady(reg.waiting);
+      return;
+    }
+
+    if (reg.installing) {
+>>>>>>> task-update-reload
       indexController._trackInstalling(reg.installing);
       return;
     }
 
-    // TODO: otherwise, listen for new installing workers arriving.
-    // If one arrives, track its progress.
-    // If it becomes "installed", call
-    // indexController._updateReady()
     reg.addEventListener('updatefound', function() {
-     indexController._trackInstalling(reg.installing);
-   });
+      indexController._trackInstalling(reg.installing);
+    });
+  });
+
+  // TODO: listen for the controlling service worker changing
+  // and reload the page
+  navigator.serviceWorker.addEventListener('controllerchange', function() {
+    window.location.reload();
   });
 };
 
@@ -56,9 +71,15 @@ IndexController.prototype._trackInstalling = function(worker) {
   });
 };
 
-IndexController.prototype._updateReady = function() {
+IndexController.prototype._updateReady = function(worker) {
   var toast = this._toastsView.show("New version available", {
-    buttons: ['whatever']
+    buttons: ['refresh', 'dismiss']
+  });
+
+  toast.answer.then(function(answer) {
+    if (answer != 'refresh') return;
+    // TODO: tell the service worker to skipWaiting
+    worker.postMessage({action: 'skipWaiting'});
   });
 };
 
