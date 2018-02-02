@@ -1,12 +1,11 @@
 //define what service worker does here
 self.addEventListener('fetch', function(event) {
-	// TODO: respond to all requests with an html response
-	// containing an element with class="a-winner-is-me".
-	// Ensure the Content-Type of the response is "text/html"
+  // TODO: only respond to requests with a
+  // url ending in ".jpg"
 
-  event.respondWith(
-    new Response('<strong class="a-winner-is-me">Hello!</strong>', {
-      headers: {'Content-Type': 'text/html'}
-    })
-  );
+  if(event.request.url.endsWith('.jpg')){
+    event.respondWith(
+      fetch('/imgs/dr-evil.gif');
+    );
+  }
 });
